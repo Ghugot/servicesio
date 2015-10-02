@@ -11,6 +11,6 @@
 		"require": {
         "php": ">=5.3.3"
     },
-    "target-dir": "Redgem/ServiceIO",
+    "target-dir": "Redgem/ServicesIO",
     "minimum-stability": "dev"
 }

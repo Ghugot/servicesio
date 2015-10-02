@@ -5,7 +5,7 @@
     "description": "ServicesIO is a Symfony bundle that provide you to turn your project into a service oriented element very easily",
     "autoload": {
         "psr-0": {
-            "Redgem\\ServiceIO": ""
+            "Redgem\\ServicesIO": ""
         }
     },
 		"require": {

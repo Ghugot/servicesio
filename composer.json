@@ -1,0 +1,16 @@
+{
+    "name": "redgem/serviceio-bundle",
+    "license": "MIT",
+    "type": "symfony-bundle",
+    "description": "ServicesIO is a Symfony bundle that provide you to turn your project into a service oriented element very easily",
+    "autoload": {
+        "psr-0": {
+            "Redgem\\ServiceIO": ""
+        }
+    },
+		"require": {
+        "php": ">=5.3.3"
+    },
+    "target-dir": "Redgem/ServiceIO",
+    "minimum-stability": "dev"
+}

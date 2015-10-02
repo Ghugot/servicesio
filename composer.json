@@ -1,5 +1,5 @@
 {
-    "name": "redgem/serviceio-bundle",
+    "name": "redgem/servicesio-bundle",
     "license": "MIT",
     "type": "symfony-bundle",
     "description": "ServicesIO is a Symfony bundle that provide you to turn your project into a service oriented element very easily",

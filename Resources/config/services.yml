@@ -1,0 +1,5 @@
+services:
+    servicesio_view:
+        class: Redgem\ServicesIOBundle\Lib\View\Service
+        arguments:
+            container: "@service_container"

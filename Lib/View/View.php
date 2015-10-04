@@ -115,9 +115,27 @@ abstract class View
      * 
      * @return Item
      */
-    protected function execute()
+    protected function content()
     {
         return $this->createCollection();
+    }
+
+    /**
+     * call and execute a partial View class. The Entity is merged in the parent tree on the right place
+     * all the params are forwarded to this new context, and merged with your additionnals.
+     * 
+     * @param string $path   the path for partial view class
+     * @param string $params additional params
+     */
+    protected function partial($path, $params = array())
+    {
+        $render = new Render(
+            $this->_container,
+            $path,
+            array_merge($this->params, $params)
+        );
+        
+        return $render->get();
     }
 
     /**

@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use \RuntimeException;
 use \ReflectionClass;
+use \Exception;
 
 /**
  * the Service class drive the rendering of dataflow and is called by controllers
@@ -34,6 +35,13 @@ class Service
      * @var Container
      */
     private $_container;
+
+    /**
+     * the views classes extension list
+     * 
+     * @var $_viewExtensionList
+     */
+    private $_viewExtensionList = array();
 
     /**
      * the constructor
@@ -55,23 +63,24 @@ class Service
      */
     public function render($path, array $params = array())
     {
-        $className = $this->_extractClassNameFromPath($path);
-        if (!class_exists($className)) {
-            throw new Exception(
-                sprintf('path "%s" could not be found', $path)
-            );
+        $this->_createViewExtensionList($path, $params);
+
+        $content = end($this->_viewExtensionList)->content();
+        
+        $viewExtensionList = array_reverse($this->_viewExtensionList);
+        foreach($viewExtensionList as $view) {
+            $parser = new Parser($content, $view);
+            $content = $parser->getReplacedContent();
         }
 
-        $reflexionObject = new ReflectionClass($className);
-        $o = $reflexionObject->newInstance($this->_container);
-        $o->setParams($params);
-
+        $factory = new Factory($content);
+   
         $response = new Response();
-        $factory = new Factory($o->execute());
-
-        $response->setContent(json_encode($factory->get()));
+        $response->setContent(
+            json_encode($factory->get())
+        );
         $response->headers->set('Content-Type', 'application/json');
-        return $response;      
+        return $response;
     }
 
     /**
@@ -85,5 +94,31 @@ class Service
     {
         $path = preg_replace('|^([^:]+):(.+)$|Ui', '$1:View:$2', $path);
         return str_replace(':', '\\', $path);
+    }
+
+    /**
+     * get the view list based on parents hierarchy and associated with the path and params
+     *
+     * @param string $className the view class name
+     * @param array  $params    the data to send to the view
+     */
+    private function _createViewExtensionList($path, array $params = array())
+    {
+        do {
+            $className = $this->_extractClassNameFromPath($path);
+            if (!class_exists($className)) {
+                throw new Exception(
+                    sprintf('path "%s" could not be found', $path)
+                );
+            }
+            
+            $reflexionObject = new ReflectionClass($className);
+            $o = $reflexionObject->newInstance($this->_container);
+            $o->setParams($params);
+            
+            $this->_viewExtensionList[] = $o;
+
+            $path = $o->getParent();
+        } while ($o->getParent());        
     }
 }

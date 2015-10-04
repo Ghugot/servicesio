@@ -104,7 +104,7 @@ abstract class View
      *
      * @return string
      */
-    protected function getParent()
+    public function getParent()
     {
         return null;
     }

@@ -25,6 +25,13 @@ namespace Redgem\ServicesIOBundle\Lib\Entity;
 class Item extends Collection
 {
     /**
+     * if this field is actually a placeholder, its name
+     *
+     * @var string
+     */
+    protected $placecholders;
+
+    /**
      * regular getter for a field of the entity
      * 
      * @param string $key     the field name
@@ -44,16 +51,34 @@ class Item extends Collection
     /**
      * regular setter for a field of the entity
      * 
-     * @param string $key   the field name
-     * @param mixed  $value the value
+     * @param string $key         the field name
+     * @param mixed  $value       the value
+     * @param string $placeholder if this field is actually a placeholder, its name
      * 
      * @return Item
      */
-    public function set($key, $value)
+    public function set($key, $value, $placeholder = null)
     {
         $this->datas[strtolower($key)] = $value;
+        $this->placecholders[strtolower($key)] = $placeholder;
 
         return $this;
+    }
+
+    /**
+     * if this field is actually a placeholder, its name
+     *
+     * @param string $key     the field name
+     *
+     * @return string
+     */
+    public function getPlaceholder($key)
+    {
+        if (!isset($this->placecholders[strtolower($key)])) {
+            return null;
+        }
+    
+        return $this->placecholders[strtolower($key)];
     }
 
     /**

@@ -14,7 +14,7 @@
 namespace Redgem\ServicesIOBundle\Lib\View;
 
 use Redgem\ServicesIOBundle\Lib\Factory\Output\Factory;
-use Symfony\Component\HttpFoundation\Response;
+use Redgem\ServicesIOBundle\Lib\View\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
 /**
@@ -54,13 +54,16 @@ class Service
     public function render($path, array $params = array())
     {
         $render = new Render($this->_container, $path, $params);
+        $entity = $render->get();
 
-        $factory = new Factory($render->get());
-   
+        $factory = new Factory($entity);
+
         $response = new Response();
-        $response->setContent(
-            json_encode($factory->get())
-        );
+        $response
+            ->setSource($entity)
+            ->setContent(
+                json_encode($factory->get())
+            );
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }

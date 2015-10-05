@@ -14,6 +14,7 @@
 namespace Redgem\ServicesIOBundle\Lib\View;
 
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Redgem\ServicesIOBundle\Lib\Entity\Item;
 use Redgem\ServicesIOBundle\Lib\Entity\Collection;
 use Redgem\ServicesIOBundle\Lib\Entity\Base as Entity;
@@ -136,6 +137,28 @@ abstract class View
         );
         
         return $render->get();
+    }
+
+    /**
+     * call and execute a controller, and get the entity from his View class. The Entity is merged in the parent tree on the right place
+     * all the params are forwarded to this new context, and merged with your additionnals.
+     *
+     * @param string $controller The controller name (a string like BlogBundle:Post:index)
+     * @param string $params additional params
+     */
+    protected function controller($controller, $params = array())
+    {
+        $params = array_merge($this->params, $params);
+        $params['_controller'] = $controller;
+        $subRequest = $this->_container->get('request_stack')->getCurrentRequest()->duplicate(array(), null, $params);
+
+        $response = $this->_container->get('http_kernel')->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+
+        if ('Redgem\\ServicesIOBundle\\Lib\\View\\HttpFoundation\\Response' == get_class($response) && $response->getSource()) {
+            return $response->getSource();
+        }
+        
+        return $response->getContent();
     }
 
     /**

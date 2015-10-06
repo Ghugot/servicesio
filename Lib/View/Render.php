@@ -99,6 +99,15 @@ class Render
             $o = $reflexionObject->newInstance($this->_container);
             $o->setParams($params);
 
+            if ($o->content() && $o->getParent()) {
+                throw new Exception(
+                    sprintf(
+                        'class "%s" implentent both content() and getParent() that is not allowed.',
+                        get_class($o)
+                    )
+                );
+            }
+
             $this->_viewExtensionList[] = $o;
     
             $path = $o->getParent();

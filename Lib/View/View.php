@@ -116,9 +116,9 @@ abstract class View
      * 
      * @return Item
      */
-    protected function content()
+    public function content()
     {
-        return $this->createCollection();
+        return null;
     }
 
     /**

@@ -47,7 +47,7 @@ class Parser
      * @param Entity $entity
      * @param View $view
      */
-    public function __construct(Entity $entity, View $view)
+    public function __construct($entity, View $view)
     {
         $this->_entity = $entity;
         $this->_view = $view;

@@ -50,7 +50,7 @@ class Response extends Base
      * @param Entity $source
      * @return Response
      */
-    public function setSource(Entity $source)
+    public function setSource($source)
     {
         $this->_source = $source;
         

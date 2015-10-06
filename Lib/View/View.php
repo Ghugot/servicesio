@@ -103,7 +103,7 @@ abstract class View
 
     /**
      *
-     * @return string
+     * @return string|array
      */
     public function getParent()
     {

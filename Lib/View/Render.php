@@ -95,17 +95,10 @@ class Render
     private function _createViewExtensionList($path, array $params = array())
     {
         do {
-            $className = $this->_extractClassNameFromPath($path);
-            if (!class_exists($className)) {
-                throw new Exception(
-                    sprintf('path "%s" could not be found', $path)
-                );
-            }
-    
-            $reflexionObject = new ReflectionClass($className);
+            $reflexionObject = new ReflectionClass($this->_getClassNameFromConfig($path));
             $o = $reflexionObject->newInstance($this->_container);
             $o->setParams($params);
-    
+
             $this->_viewExtensionList[] = $o;
     
             $path = $o->getParent();
@@ -113,9 +106,99 @@ class Render
     }
 
     /**
+     * get the classname from a configuration
+     * 
+     * @param string|array<string> $path
+     * 
+     * @return string
+     */
+    private function _getClassNameFromConfig($path)
+    {
+        $list = $this->_getClassListFromPath($path);
+        
+        foreach($list as $item) {
+            $className = $this->_extractClassNameFromPath($item);
+
+            if (class_exists($className)) {
+                return $className;
+            }
+        }
+
+        throw new Exception(
+            is_array($path) ? sprintf('None of "%s" view path could be found.', implode('", "', $path))
+                : sprintf('View path "%s" could not be found.', $path)
+        );
+    }
+
+    /**
+     * this method extract a list of view classes that match a path
+     * according to path values (array or string) and bundles extensions
+     * 
+     * @param string|array<string> $path
+     * @return array
+     */
+    private function _getClassListFromPath($path)
+    {
+        if (!is_array($path)) {
+            $path = array($path);
+        }
+
+        $a = array();
+        foreach($path as $item) {
+            $sourceBundle = $this->_extractBundleNameFromPath($item);
+
+            foreach($this->_getBundleChildsOf($sourceBundle) as $bundleName) {
+                $a[] = preg_replace('|^('.$sourceBundle.'):(.*)$|', $bundleName . ':$2', $item);
+            }
+        }
+
+        return $a;
+    }
+
+    /**
+     * get all the childs of a bundle
+     * 
+     * @param string $sourceBundle
+     * 
+     * @return array<string> 
+     */
+    private function _getBundleChildsOf($sourceBundle)
+    {
+        $a[] = $sourceBundle;
+
+        do {
+            $child = null;
+            foreach($this->_container->get('kernel')->getBundles() as $bundle) {
+                if ($sourceBundle == $bundle->getParent()) {
+                    $child = substr(strrchr(get_class($bundle), '\\'), 1);
+                }
+            }
+
+            if ($child) {
+                $a[] = $child;
+                $sourceBundle = $child;
+            }
+        } while ($child);
+        
+        return array_reverse($a);
+    }
+
+    /**
+     * get bundle name from path
+     *
+     * @param string| $path
+     *
+     * @return string
+     */
+    private function _extractBundleNameFromPath($path)
+    {
+        return preg_replace('|^([^:]+):(.+)$|Ui', '$1', $path);
+    }
+
+    /**
      * get view classname from path
      *
-     * @param string $path
+     * @param string| $path
      *
      * @return string
      */

@@ -11,7 +11,7 @@ _ServicesIO_ basically provide you two components :
 
  - a view layer that is built to get the same behavior as a powerful templating engine. The view layer is called by your controller, build the data tree you want to render, and actually render it. It provide you the tools you need to build re-usables, flexibles and extensibles view components.
 
-__In the version 0.9, only the view layer and the json language are available.__
+__In the version 0.1, only the view layer and the json language are available.__
 
 ## Install the bundle
 

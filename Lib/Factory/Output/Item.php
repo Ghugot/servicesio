@@ -35,11 +35,11 @@ class Item extends Factory
     public function get()
     {
         $v = array();
-        foreach($this->node as $field) {
+        foreach($this->node as $key => $field) {
             $factory = new Factory($field);
-            $v[] = $factory->get();
+            $v[$key] = $factory->get();
         }
-
+        
         return $v;
     }
 }

@@ -35,11 +35,11 @@ class Collection extends Factory
     public function get()
     {
         $v = array();
-        foreach($this->node as $key => $field) {
+        foreach($this->node as $field) {
             $factory = new Factory($field);
-            $v[$key] = $factory->get();
+            $v[] = $factory->get();
         }
-
+        
         return $v;
     }
 }

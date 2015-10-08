@@ -38,11 +38,11 @@ class Factory extends Base
     {
         if (!is_object($this->node)) {
             return $this->node;
-        }else if ('Redgem\\ServicesIOBundle\\Lib\\Node\\Collection' == get_class($this->node)) {
-            $factory = new Item($this->node);
+        } else if ('Redgem\\ServicesIOBundle\\Lib\\Node\\Collection' == get_class($this->node)) {
+            $factory = new Collection($this->node);
             return $factory->get();
         } else if ('Redgem\\ServicesIOBundle\\Lib\\Node\\Item' == get_class($this->node)) {
-            $factory = new Collection($this->node);
+            $factory = new Item($this->node);
             return $factory->get();
         } else {
             throw new Exception('building output datas from a custom Item class is not yet supported');

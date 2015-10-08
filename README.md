@@ -3,7 +3,7 @@ ServicesIOBundle
 
 _ServicesIOBundle_ is a Symfony bundle that provides you the ability to turn your project into an efficient service oriented element very easily.
 
-_ServicesIO_ basically provide you two components :
+_ServicesIO_ basically introduces two components :
 
  - a reader. the reader build for you a model that wrap the input datas.
    + from the standart input (i.e Request object).
@@ -19,7 +19,7 @@ First of all, add and enable _ServicesIOBundle_ in your project.
 
 Add it in composer :
 
-`composer require redgem/servicesio-bundle`
+`composer require redgem/servicesio-bundle:0.1.*`
 
 Update your project and enable the bundle in the Kernel :
 

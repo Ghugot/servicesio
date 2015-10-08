@@ -46,21 +46,21 @@ class Service
     /**
      * render the view. This method is supposed to be called by the controller
      * 
-     * @param string $className the view class name
+     * @param string $viewpath  the viewpath (a string like MyBundle:MessageView)
      * @param array  $params    the data to send to the view
      *
      * @return string
      */
-    public function render($path, array $params = array())
+    public function render($viewpath, array $params = array())
     {
-        $render = new Render($this->_container, $path, $params);
-        $entity = $render->get();
+        $render = new Render($this->_container, $viewpath, $params);
+        $node = $render->get();
 
-        $factory = new Factory($entity);
+        $factory = new Factory($node);
 
         $response = new Response();
         $response
-            ->setSource($entity)
+            ->setSource($node)
             ->setContent(
                 json_encode($factory->get())
             );

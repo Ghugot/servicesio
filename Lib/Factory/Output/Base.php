@@ -13,10 +13,8 @@
 
 namespace Redgem\ServicesIOBundle\Lib\Factory\Output;
 
-use Redgem\ServicesIOBundle\Lib\Entity\Base as Entity;
-
 /**
- * The factory that is called to turn a Entity tree into a json output.
+ * The factory that is called to turn a nodes tree into a json output.
  * It has a recursive usage.
  *
  * @category Factories
@@ -28,21 +26,19 @@ use Redgem\ServicesIOBundle\Lib\Entity\Base as Entity;
 class Base
 {
     /**
-     * the Entity to extract
+     * the Node to extract
      * 
-     * @var Entity
+     * @var Node
      */
-    protected $entity;
+    protected $node;
     
     /**
      * the constructor
      *
-     * @param array  $datas        the raw datas
-     * @param string $customEntity the extended entity we want to use
-     * @param array  $config       the Wrapper extensions configuration
+     * @param Node  $node the root node
      */
-    public function __construct($entity)
+    public function __construct($node)
     {
-        $this->entity = $entity;
+        $this->node = $node;
     }
 }

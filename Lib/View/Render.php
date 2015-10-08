@@ -19,7 +19,7 @@ use \ReflectionClass;
 use \Exception;
 
 /**
- * The rendering class call the view class to collect Entity
+ * The rendering class call the view class to collect the different nodes and build a final tree.
  *
  * @category View
  * @package  Redgem\ServicesIOBundle
@@ -33,13 +33,6 @@ class Render
      * @var Container
      */
     private $_container;
-
-    /**
-     * the view classpath
-     * 
-     * @var string
-     */
-    private $_path;
     
     /**
      * the params to pass to the view
@@ -58,19 +51,18 @@ class Render
     /**
      * constructor
      *
-     * @param Container $container the Symfony Container
-     * @param string $className the view class name
-     * @param array  $params    the data to send to the view
+     * @param Container            $container the Symfony Container
+     * @param string|array<string> $viewpath the viewpath (a string like MyBundle:MessageView)
+     * @param array                $params    the data to send to the view
      *
      * @return string
      */
-    public function __construct(Container $container, $path, array $params = array())
+    public function __construct(Container $container, $viewpath, array $params = array())
     {
         $this->_container = $container;
-        $this->_path = $path;
         $this->_params = $params;
         
-        $this->_createViewExtensionList($path, $params);
+        $this->_createViewExtensionList($viewpath, $params);
     }
     
     public function get()
@@ -89,13 +81,13 @@ class Render
     /**
      * get the view list based on parents hierarchy and associated with the path and params
      *
-     * @param string $className the view class name
+     * @param string $viewpath  the viewpath (a string like MyBundle:MessageView)
      * @param array  $params    the data to send to the view
      */
-    private function _createViewExtensionList($path, array $params = array())
+    private function _createViewExtensionList($viewpath, array $params = array())
     {
         do {
-            $reflexionObject = new ReflectionClass($this->_getClassNameFromConfig($path));
+            $reflexionObject = new ReflectionClass($this->_getClassNameFromConfig($viewpath));
             $o = $reflexionObject->newInstance($this->_container);
             $o->setParams($params);
 
@@ -110,23 +102,23 @@ class Render
 
             $this->_viewExtensionList[] = $o;
     
-            $path = $o->getParent();
+            $viewpath = $o->getParent();
         } while ($o->getParent());
     }
 
     /**
      * get the classname from a configuration
      * 
-     * @param string|array<string> $path
+     * @param string|array<string> $viewpath the viewpath (a string like MyBundle:MessageView)
      * 
      * @return string
      */
-    private function _getClassNameFromConfig($path)
+    private function _getClassNameFromConfig($viewpath)
     {
-        $list = $this->_getClassListFromPath($path);
+        $list = $this->_getClassListFromPath($viewpath);
         
         foreach($list as $item) {
-            $className = $this->_extractClassNameFromPath($item);
+            $className = $this->_extractClassNameFromViewpath($item);
 
             if (class_exists($className)) {
                 return $className;
@@ -134,8 +126,8 @@ class Render
         }
 
         throw new Exception(
-            is_array($path) ? sprintf('None of "%s" view path could be found.', implode('", "', $path))
-                : sprintf('View path "%s" could not be found.', $path)
+            is_array($viewpath) ? sprintf('None of "%s" view path could be found.', implode('", "', $viewpath))
+                : sprintf('View path "%s" could not be found.', $viewpath)
         );
     }
 
@@ -143,18 +135,19 @@ class Render
      * this method extract a list of view classes that match a path
      * according to path values (array or string) and bundles extensions
      * 
-     * @param string|array<string> $path
+     * @param string|array<string> $viewpath the viewpath (a string like MyBundle:MessageView)
+     * 
      * @return array
      */
-    private function _getClassListFromPath($path)
+    private function _getClassListFromPath($viewpath)
     {
-        if (!is_array($path)) {
-            $path = array($path);
+        if (!is_array($viewpath)) {
+            $viewpath = array($viewpath);
         }
 
         $a = array();
-        foreach($path as $item) {
-            $sourceBundle = $this->_extractBundleNameFromPath($item);
+        foreach($viewpath as $item) {
+            $sourceBundle = $this->_extractBundleNameFromViewpath($item);
 
             foreach($this->_getBundleChildsOf($sourceBundle) as $bundleName) {
                 $a[] = preg_replace('|^('.$sourceBundle.'):(.*)$|', $bundleName . ':$2', $item);
@@ -195,25 +188,25 @@ class Render
     /**
      * get bundle name from path
      *
-     * @param string| $path
+     * @param string|array<string> $viewpath the viewpath (a string like MyBundle:MessageView)
      *
      * @return string
      */
-    private function _extractBundleNameFromPath($path)
+    private function _extractBundleNameFromViewpath($viewpath)
     {
-        return preg_replace('|^([^:]+):(.+)$|Ui', '$1', $path);
+        return preg_replace('|^([^:]+):(.+)$|Ui', '$1', $viewpath);
     }
 
     /**
      * get view classname from path
      *
-     * @param string| $path
+     * @param string|array<string> $viewpath the viewpath (a string like MyBundle:MessageView)
      *
      * @return string
      */
-    private function _extractClassNameFromPath($path)
+    private function _extractClassNameFromViewpath($viewpath)
     {
-        $path = preg_replace('|^([^:]+):(.+)$|Ui', '$1:View:$2', $path);
-        return str_replace(':', '\\', $path);
+        $viewpath = preg_replace('|^([^:]+):(.+)$|Ui', '$1:View:$2', $viewpath);
+        return str_replace(':', '\\', $viewpath);
     }
 }

@@ -4,19 +4,19 @@
  *
  * PHP Version 5
  *
- * @category Entities
+ * @category Nodes
  * @package  Redgem\ServicesIOBundle
  * @author   Guillaume HUGOT <guillaume.hugot@gmail.com>
  * @license  MIT
  * @link     http://github.com/ghugot/ServicesIO
  */
 
-namespace Redgem\ServicesIOBundle\Lib\Entity;
+namespace Redgem\ServicesIOBundle\Lib\Node;
 
 /**
- * the Item entity handle structured datamodels
+ * the Item node handle structured datamodels
  *
- * @category Entities
+ * @category Nodes
  * @package  Redgem\ServicesIOBundle
  * @author   Guillaume HUGOT <guillaume.hugot@gmail.com>
  * @license  MIT
@@ -32,7 +32,7 @@ class Item extends Collection
     protected $placecholders;
 
     /**
-     * regular getter for a field of the entity
+     * regular getter for a field of the node
      * 
      * @param string $key     the field name
      * @param mixed  $default the default value if the field doesn't exists
@@ -49,7 +49,7 @@ class Item extends Collection
     }
 
     /**
-     * regular setter for a field of the entity
+     * regular setter for a field of the node
      * 
      * @param string $key         the field name
      * @param mixed  $value       the value

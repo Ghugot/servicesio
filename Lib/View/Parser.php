@@ -13,8 +13,6 @@
 
 namespace Redgem\ServicesIOBundle\Lib\View;
 
-use Redgem\ServicesIOBundle\Lib\Entity\Base as Entity;
-
 /**
  * the Parser class catch and replace all the found placeholders in the Entities tree
  * with their implementation in the View hierarchy.
@@ -28,11 +26,11 @@ use Redgem\ServicesIOBundle\Lib\Entity\Base as Entity;
 class Parser
 {
     /**
-     * The root entity for tree content
+     * The root node for tree content
      * 
-     * @var Entity
+     * @var Node
      */
-    private $_entity;
+    private $_node;
     
     /**
      * the instancied view to find methods for replacement
@@ -44,44 +42,44 @@ class Parser
     /**
      * constructor
      * 
-     * @param Entity $entity
+     * @param Node $node
      * @param View $view
      */
-    public function __construct($entity, View $view)
+    public function __construct($node, View $view)
     {
-        $this->_entity = $entity;
+        $this->_node = $node;
         $this->_view = $view;
     }
 
     /**
      * replace all the placeholders in the tree and return the new content;
      * 
-     * @return Entity;
+     * @return Node;
      */
     public function getReplacedContent()
     {
-        if ('Redgem\\ServicesIOBundle\\Lib\\Entity\\Item' != get_class($this->_entity)) {
-            return $this->_entity;
+        if ('Redgem\\ServicesIOBundle\\Lib\\Node\\Item' != get_class($this->_node)) {
+            return $this->_node;
         }
 
-        foreach($this->_entity as $key => $val) {
-            if ($this->_entity->getPlaceholder($key)) {
-                $this->_entity->set(
+        foreach($this->_node as $key => $val) {
+            if ($this->_node->getPlaceholder($key)) {
+                $this->_node->set(
                     $key,
-                    $this->findPlaceholderDatas($this->_entity->getPlaceholder($key)),
-                    $this->_entity->getPlaceholder($key)
+                    $this->findPlaceholderDatas($this->_node->getPlaceholder($key)),
+                    $this->_node->getPlaceholder($key)
                 );
             }
         }
 
-        foreach($this->_entity as $key => $val) {
+        foreach($this->_node as $key => $val) {
             if (is_object($val)) {
                 $parser = new self($val, $this->_view);
-                $this->_entity->set($key, $parser->getReplacedContent());
+                $this->_node->set($key, $parser->getReplacedContent());
             }
         }
 
-        return $this->_entity;
+        return $this->_node;
     }
 
     /**
@@ -89,7 +87,7 @@ class Parser
      * 
      * @param string $name
      * 
-     * @return Entity
+     * @return Node
      */
     private function findPlaceholderDatas($name)
     {

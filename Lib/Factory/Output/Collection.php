@@ -13,10 +13,8 @@
 
 namespace Redgem\ServicesIOBundle\Lib\Factory\Output;
 
-use Redgem\ServicesIOBundle\Lib\Entity\Base as Entity;
-
 /**
- * The factory that is called to turn a Entity tree into a json output.
+ * The factory that is called to turn a nodes tree into a json output.
  * It has a recursive usage.
  *
  * @category Factories
@@ -37,7 +35,7 @@ class Collection extends Factory
     public function get()
     {
         $v = array();
-        foreach($this->entity as $key => $field) {
+        foreach($this->node as $key => $field) {
             $factory = new Factory($field);
             $v[$key] = $factory->get();
         }

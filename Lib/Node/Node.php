@@ -4,27 +4,27 @@
  *
  * PHP Version 5
  *
- * @category Entities
+ * @category Nodes
  * @package  Redgem\ServicesIOBundle
  * @author   Guillaume HUGOT <guillaume.hugot@gmail.com>
  * @license  MIT
  * @link     http://github.com/ghugot/ServicesIO
  */
 
-namespace Redgem\ServicesIOBundle\Lib\Entity;
+namespace Redgem\ServicesIOBundle\Lib\Node;
 
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
 /**
- * the Base entity is the root class for any entities
+ * the Node class is the root class for any nodes
  *
- * @category Entities
+ * @category Nodes
  * @package  Redgem\ServicesIOBundle
  * @author   Guillaume HUGOT <guillaume.hugot@gmail.com>
  * @license  MIT
  * @link     http://github.com/ghugot/ServicesIO
  */
-class Base
+class Node
 {
     /**
      * @var Container
@@ -51,7 +51,7 @@ class Base
     }
 
     /**
-     * Is this entity empty ?
+     * Is this node empty ?
      * 
      * @return bool
      */
@@ -61,7 +61,7 @@ class Base
     }
 
     /**
-     * count the number of elements of the entity
+     * count the number of elements of the node
      * 
      * @return int
      */

@@ -4,14 +4,14 @@
  *
  * PHP Version 5
  *
- * @category Entities
+ * @category Nodes
  * @package  Redgem\ServicesIOBundle
  * @author   Guillaume HUGOT <guillaume.hugot@gmail.com>
  * @license  MIT
  * @link     http://github.com/ghugot/ServicesIO
  */
 
-namespace Redgem\ServicesIOBundle\Lib\Entity;
+namespace Redgem\ServicesIOBundle\Lib\Node;
 
 use \ArrayAccess;
 use \Countable;
@@ -19,15 +19,15 @@ use \IteratorAggregate;
 use \ArrayIterator;
 
 /**
- * the Collection entity handle pure array of datamodels
+ * the Collection node handle pure array of datamodels
  *
- * @category Entities
+ * @category Nodes
  * @package  Redgem\ServicesIOBundle
  * @author   Guillaume HUGOT <guillaume.hugot@gmail.com>
  * @license  MIT
  * @link     http://github.com/ghugot/ServicesIO
  */
-class Collection extends Base implements ArrayAccess, Countable, IteratorAggregate
+class Collection extends Node implements ArrayAccess, Countable, IteratorAggregate
 {    
     /**
      * ArrayAccess interface method implmentation
@@ -44,7 +44,7 @@ class Collection extends Base implements ArrayAccess, Countable, IteratorAggrega
     }
 
     /**
-     * Get the first element of the entity
+     * Get the first element of the node
      *
      * @return mixed
      */
@@ -54,7 +54,7 @@ class Collection extends Base implements ArrayAccess, Countable, IteratorAggrega
     }
     
     /**
-     * Get the last element of the entity
+     * Get the last element of the node
      *
      * @return mixed
      */

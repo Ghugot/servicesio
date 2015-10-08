@@ -15,9 +15,9 @@ namespace Redgem\ServicesIOBundle\Lib\View;
 
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Redgem\ServicesIOBundle\Lib\Entity\Item;
-use Redgem\ServicesIOBundle\Lib\Entity\Collection;
-use Redgem\ServicesIOBundle\Lib\Entity\Base as Entity;
+use Redgem\ServicesIOBundle\Lib\Node\Item;
+use Redgem\ServicesIOBundle\Lib\Node\Collection;
+use Redgem\ServicesIOBundle\Lib\Node\Node;
 
 /**
  * the View class is the abstract basics that view classes should extend.
@@ -84,7 +84,7 @@ abstract class View
      */
     protected function createCollection()
     {
-        return $this->_setUpNewEntity(
+        return $this->_setUpNewNode(
             new Collection()
         );
     }
@@ -96,7 +96,7 @@ abstract class View
      */
     protected function createItem()
     {
-        return $this->_setUpNewEntity(
+        return $this->_setUpNewNode(
             new Item()
         );
     }
@@ -122,17 +122,17 @@ abstract class View
     }
 
     /**
-     * call and execute a partial View class. The Entity is merged in the parent tree on the right place
+     * call and execute a partial View class. The node is merged in the parent tree on the right place
      * all the params are forwarded to this new context, and merged with your additionnals.
      * 
-     * @param string $path   the path for partial view class
-     * @param string $params additional params
+     * @param string $viewpath  the viewpath (a string like MyBundle:MessageView)
+     * @param string $params    additional params
      */
-    protected function partial($path, $params = array())
+    protected function partial($viewpath, $params = array())
     {
         $render = new Render(
             $this->_container,
-            $path,
+            $viewpath,
             array_merge($this->params, $params)
         );
         
@@ -140,7 +140,7 @@ abstract class View
     }
 
     /**
-     * call and execute a controller, and get the entity from his View class. The Entity is merged in the parent tree on the right place
+     * call and execute a controller, and get the node from his View class. The node is merged in the parent tree on the right place
      * all the params are forwarded to this new context, and merged with your additionnals.
      *
      * @param string $controller The controller name (a string like BlogBundle:Post:index)
@@ -162,15 +162,15 @@ abstract class View
     }
 
     /**
-     * set up the entity context
+     * make up the node context
      * 
-     * @param Entity $entity
-     * @return Entity
+     * @param Node $node
+     * @return Node
      */
-    private function _setUpNewEntity(Entity $entity)
+    private function _setUpNewNode(Node $node)
     {
-        $entity->setContainer($this->_container);
-    
-        return $entity;
+        $node->setContainer($this->_container);
+
+        return $node;
     }
 }

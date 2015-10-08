@@ -13,11 +13,10 @@
 
 namespace Redgem\ServicesIOBundle\Lib\Factory\Output;
 
-use Redgem\ServicesIOBundle\Lib\Entity\Base as Entity;
 use \Exception;
 
 /**
- * The factory that is called to turn a Entity tree into a json output.
+ * The factory that is called to turn a nodes tree into a json output.
  * It has a recursive usage.
  *
  * @category Factories
@@ -37,13 +36,13 @@ class Factory extends Base
      */
     public function get()
     {
-        if (!is_object($this->entity)) {
-            return $this->entity;
-        }else if ('Redgem\\ServicesIOBundle\\Lib\\Entity\\Collection' == get_class($this->entity)) {
-            $factory = new Item($this->entity);
+        if (!is_object($this->node)) {
+            return $this->node;
+        }else if ('Redgem\\ServicesIOBundle\\Lib\\Node\\Collection' == get_class($this->node)) {
+            $factory = new Item($this->node);
             return $factory->get();
-        } else if ('Redgem\\ServicesIOBundle\\Lib\\Entity\\Item' == get_class($this->entity)) {
-            $factory = new Collection($this->entity);
+        } else if ('Redgem\\ServicesIOBundle\\Lib\\Node\\Item' == get_class($this->node)) {
+            $factory = new Collection($this->node);
             return $factory->get();
         } else {
             throw new Exception('building output datas from a custom Item class is not yet supported');

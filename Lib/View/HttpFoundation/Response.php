@@ -14,7 +14,6 @@
 namespace Redgem\ServicesIOBundle\Lib\View\HttpFoundation;
 
 use Symfony\Component\HttpFoundation\Response as Base;
-use Redgem\ServicesIOBundle\Lib\Entity\Base as Entity;
 
 /**
  * The HTTP response
@@ -28,16 +27,16 @@ use Redgem\ServicesIOBundle\Lib\Entity\Base as Entity;
 class Response extends Base
 {
     /**
-     * the source Entity of the response
+     * the source node of the response
      * 
-     * @var Entity
+     * @var Node
      */
     private $_source;
 
     /**
-     * get the source Entity
+     * get the source node
      *
-     * @return Entity
+     * @return Node
      */
     public function getSource()
     {
@@ -45,9 +44,9 @@ class Response extends Base
     }
 
     /**
-     * set the source Entity
+     * set the source node
      * 
-     * @param Entity $source
+     * @param Node $source
      * @return Response
      */
     public function setSource($source)

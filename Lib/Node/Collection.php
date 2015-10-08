@@ -1,6 +1,6 @@
 <?php
 /**
- * Entities : collection
+ * Nodes : collection
  *
  * PHP Version 5
  *

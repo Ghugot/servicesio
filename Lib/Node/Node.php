@@ -1,6 +1,6 @@
 <?php
 /**
- * Entities : base
+ * Nodes : base
  *
  * PHP Version 5
  *

@@ -17,23 +17,11 @@ __In the version 0.1, only the view layer and the json language are available.__
 
 First of all, add and enable _ServicesIOBundle_ in your project.
 
-Add it in composer.json :
+Add it in composer :
 
-``` json
-"repositories": [
-  //...
-  { "type": "git", "url": "ssh://git@github.com:22/ghugot/ServicesIOBundle.git" }
-],
+`composer require redgem/servicesio-bundle`
 
-"require": {
-  //...
-  "redgem/servicesio-bundle": "master"
-},
-
-"minimum-stability": "dev"
-```
-
-And then, update your project and enable the bundle in the Kernel :
+Update your project and enable the bundle in the Kernel :
 
 ``` php
 // app/AppKernel.php
@@ -46,6 +34,8 @@ public function registerBundles()
     );
 }
 ```
+
+You are now ready to use it.
 
 ## ServicesIO view
 

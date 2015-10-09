@@ -78,6 +78,18 @@ abstract class View
     }
 
     /**
+     * get a parameter
+     *
+     * @param string $parameter
+     *
+     * @return string
+     */
+    protected function getParameter($parameter)
+    {
+        return $this->_container->getParameter($parameter);
+    }
+
+    /**
      * create a new collection for the view tree
      * 
      * @return Collection

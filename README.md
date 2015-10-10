@@ -37,7 +37,7 @@ public function registerBundles()
 
 You are now ready to use it.
 
-## ServicesIO view
+## ServicesIO View
 
 You are probably used to _Twig_ to build and render your HTML views on your projects.
 
@@ -418,7 +418,7 @@ A _single_ request will now display :
 }
 ```
 
-Additionnaly to `partial()` method, a `controller()` method is available. This method is kind of similar. Instead of calling just a view, it will call a whole Symfony controller as a _fragment_.
+In addition to to `partial()` method, a `controller()` method is available. This method is kind of similar. Instead of calling just a view, it will call a whole Symfony controller as a _fragment_.
 
 Its prototype is :
 
@@ -433,6 +433,13 @@ The response will be handle on that way :
 
  - If this new controller return a _ServicesIO view_ response, the fragment tree will be merged on the main tree at the right place.
  - Otherwise, the response will be threated as a string and merged on the main tree at the right place.
+
+And one more thing : 
+
+- `get($service)` - string $service : a Symfony service name.
+-  `getParameter($parameter)`  - string $parameter : a parameter name.
+
+methods are available as well. They just use the _container_ to call a _Symfony service_ or a _parameter_ like in a controller.
 
 ### View extensions
 

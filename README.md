@@ -191,7 +191,7 @@ The call takes 2 arguments :
 ``` php
 public function messageAction($id)
 {
-  $message = $this
+  $single = $this
     ->getDoctrine()
     ->getManager()
     ->getRepository('MyBundle:Message')->findOneById($id);
@@ -396,7 +396,7 @@ class MessageView extends View
       ->set('description', $this->params['message']->description)
       ->set('user', ($this->params['message']->user == null) ? null
       	: $this->partial('MyBundle:UserView', array('user' => $this->params['message']))
-     );
+      )
     );
   }
 }
@@ -413,8 +413,8 @@ A _single_ request will now display :
 	  "user": {
 	    "id": "1",
 	    "name": "author"
-	  }
-	}
+    }
+  }
 }
 ```
 

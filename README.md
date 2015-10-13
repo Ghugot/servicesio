@@ -268,7 +268,7 @@ Let's call it, and :
 
 ``` json
 {
-	"listing" : [
+  "listing" : [
 	  {
 	    "id" : "1",
 	    "title" : "message 1 title",
@@ -284,7 +284,7 @@ Let's call it, and :
 	    "title" : "message 3 title",
 	    "description" : "description 3 title"
 	  }
-	]
+  ]
 }
 ```
 Excellent !
@@ -406,13 +406,13 @@ A _single_ request will now display :
 
 ``` json
 {
-	"message" : {
-	  "id" : "1",
-	  "title" : "message 1 title",
-	  "description" : "description 1 title",
-	  "user": {
-	    "id": "1",
-	    "name": "author"
+  "message" : {
+    "id" : "1",
+    "title" : "message 1 title",
+    "description" : "description 1 title",
+    "user": {
+      "id": "1",
+      "name": "author"
     }
   }
 }
@@ -469,8 +469,8 @@ class SingleView extends View
   public function content()
   {
     return $this->createItem()
-    	->set('visitor', $this->controller('MyBundle:All:visitor'))
-    	->set('response', $this->createItem()
+      ->set('visitor', $this->controller('MyBundle:All:visitor'))
+      ->set('response', $this->createItem()
         ->set('message', $this->partial('MyBundle:MessageView', array('message' => $this->params['single'])))
       );
   }
@@ -489,15 +489,14 @@ class ListingView extends View
     $collection = $this->createCollection();
     
     foreach($this->params['listing'] as $message) {
-
       $collection->push(
         $this->partial('MyBundle:MessageView', array('message' => $message))
       );
     }
 
     return $this->createItem()
-    	->set('visitor', $this->controller('MyBundle:All:visitor'))
-    	->set('response', $this->createItem()
+      ->set('visitor', $this->controller('MyBundle:All:visitor'))
+      ->set('response', $this->createItem()
         ->set('listing', $collection)
       );
   }
@@ -594,7 +593,6 @@ class ListingView extends View
     $collection = $this->createCollection();
     
     foreach($this->params['listing'] as $message) {
-
       $collection->push(
         $this->partial('MyBundle:MessageView', array('message' => $message))
       );

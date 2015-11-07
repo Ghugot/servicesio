@@ -3,3 +3,16 @@ services:
         class: Redgem\ServicesIOBundle\Lib\View\Service
         arguments:
             container: "@service_container"
+
+    servicesio_model:
+        class: Redgem\ServicesIOBundle\Lib\Model\Service
+        arguments:
+            container: "@service_container"
+
+    servicesio_model_listener:
+        class: Redgem\ServicesIOBundle\Lib\Model\Listener
+        arguments:
+            model: "@servicesio_model"
+            router: "@router"
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }

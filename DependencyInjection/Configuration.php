@@ -35,12 +35,33 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('redgem_servicesio');
+        $rootNode = $treeBuilder->root('servicesio');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
-
+        $rootNode
+            ->children()
+                ->arrayNode('models')
+                    ->useAttributeAsKey('name')
+                    ->prototype('array')
+                        ->scalarNode('schema')
+                        ->end()
+                        ->arrayNode('extensions')
+                            ->prototype('array')
+                                ->children()
+                                    ->scalarNode('class')
+                                        ->isRequired()
+                                        ->cannotBeEmpty()
+                                    ->end()
+                                        ->scalarNode('path')
+                                        ->isRequired()
+                                        ->cannotBeEmpty()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+        
         return $treeBuilder;
     }
 }

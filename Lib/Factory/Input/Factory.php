@@ -13,6 +13,8 @@
 
 namespace Redgem\ServicesIOBundle\Lib\Factory\Input;
 
+use Redgem\ServicesIOBundle\Lib\Node\Node;
+
 /**
  * The factory that is called to turn a json into a node tree.
  * It has a recursive usage.
@@ -33,7 +35,7 @@ class Factory extends Base
     public function get()
     {
         if (sizeof($this->nodes) == 0) {
-            return new Base();
+            return new Node();
         }
 
         $assoc = false;

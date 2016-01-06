@@ -64,18 +64,21 @@ class Parser
 
         foreach($this->_node as $key => $val) {
             if ($this->_node->getPlaceholder($key)) {
-                $this->_node->set(
-                    $key,
-                    $this->findPlaceholderDatas($this->_node->getPlaceholder($key)),
-                    $this->_node->getPlaceholder($key)
-                );
+                $replacedValue = $this->findPlaceholderDatas($this->_node->getPlaceholder($key));
+                if ($replacedValue) {
+                    $this->_node->set(
+                        $key,
+                        $replacedValue,
+                        $this->_node->getPlaceholder($key)
+                    );
+                }
             }
         }
 
         foreach($this->_node as $key => $val) {
             if (is_object($val)) {
                 $parser = new self($val, $this->_view);
-                $this->_node->set($key, $parser->getReplacedContent());
+                $this->_node->set($key, $parser->getReplacedContent(), $this->_node->getPlaceholder($key));
             }
         }
 
@@ -92,8 +95,9 @@ class Parser
     private function findPlaceholderDatas($name)
     {
         $methodName = 'block' . ucFirst($name);
+
         if (!method_exists($this->_view, $methodName)) {
-            return $name;
+            return null;
         }
 
         return $this->_view->$methodName();

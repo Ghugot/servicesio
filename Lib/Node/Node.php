@@ -69,4 +69,17 @@ class Node
     {
         return count($this->datas);
     }
+
+    /**
+     * Never break a get()
+     *
+     * @param unknown $name      the called function name
+     * @param unknown $arguments the called function arguments
+     *
+     * @return null
+     */
+    public function __call($name, $arguments)
+    {    
+        return null;
+    }
 }

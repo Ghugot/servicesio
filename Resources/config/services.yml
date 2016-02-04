@@ -16,3 +16,6 @@ services:
             router: "@router"
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    servicesio_http:
+        class: Redgem\ServicesIOBundle\Lib\Http\Service

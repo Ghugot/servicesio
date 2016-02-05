@@ -389,7 +389,7 @@ class Request
 
         if ($this->getBody()) {
             curl_setopt($this->_curlRequest, CURLOPT_POST, 1);
-            curl_setopt($this->_curlRequest, CURLOPT_POSTFIELDS, $request->getBody());
+            curl_setopt($this->_curlRequest, CURLOPT_POSTFIELDS, $this->getBody());
         }
 
         return $this->_curlRequest;

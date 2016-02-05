@@ -99,11 +99,7 @@ class Collection extends Node implements ArrayAccess, Countable, IteratorAggrega
      */
     public function offsetExists($offset)
     {
-        throw new \InvalidArgumentException(
-            'This method is not yet implemented'
-        );
-
-        return $this;
+        return isset($this->datas[$offset]);
     }
 
     /**

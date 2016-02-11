@@ -41,11 +41,11 @@ class Item extends Collection
      */
     public function get($key, $default = null)
     {
-        if (!isset($this->datas[strtolower($key)])) {
+        if (!isset($this->datas[$key])) {
             return $default;
         }
 
-        return $this->datas[strtolower($key)];
+        return $this->datas[$key];
     }
 
     /**
@@ -59,8 +59,8 @@ class Item extends Collection
      */
     public function set($key, $value, $placeholder = null)
     {
-        $this->datas[strtolower($key)] = $value;
-        $this->placecholders[strtolower($key)] = $placeholder;
+        $this->datas[$key] = $value;
+        $this->placecholders[$key] = $placeholder;
 
         return $this;
     }
@@ -74,11 +74,11 @@ class Item extends Collection
      */
     public function getPlaceholder($key)
     {
-        if (!isset($this->placecholders[strtolower($key)])) {
+        if (!isset($this->placecholders[$key])) {
             return null;
         }
     
-        return $this->placecholders[strtolower($key)];
+        return $this->placecholders[$key];
     }
 
     /**
@@ -93,7 +93,11 @@ class Item extends Collection
     {
         if ('get' == substr($name, 0, 3)) {
             $key = substr($name, 3, strlen($name));
-            return $this->get($key);
+
+            if ($this->get($key)) {
+                return $this->get($key);
+            }
+            return $this->get(lcfirst($key));
         }
 
         return null;

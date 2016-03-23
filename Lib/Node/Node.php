@@ -14,6 +14,7 @@
 namespace Redgem\ServicesIOBundle\Lib\Node;
 
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
+use Redgem\ServicesIOBundle\Lib\Node\Exception\Undefined;
 
 /**
  * the Node class is the root class for any nodes
@@ -76,10 +77,10 @@ class Node
      * @param unknown $name      the called function name
      * @param unknown $arguments the called function arguments
      *
-     * @return null
+     * @throws Undefined
      */
     public function __call($name, $arguments)
     {    
-        return null;
+        throw new Undefined();
     }
 }

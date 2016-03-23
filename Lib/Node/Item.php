@@ -13,6 +13,8 @@
 
 namespace Redgem\ServicesIOBundle\Lib\Node;
 
+use Redgem\ServicesIOBundle\Lib\Node\Exception\Undefined;
+
 /**
  * the Item node handle structured datamodels
  *
@@ -87,19 +89,26 @@ class Item extends Collection
      * @param unknown $name      the called function name
      * @param unknown $arguments the called function arguments
      * 
+     * @throws Undefined
+     * 
      * @return mixed
      */
     public function __call($name, $arguments)
     {
+    	if ('all' == $name) {
+    		return null;
+    	}
+
         if ('get' == substr($name, 0, 3)) {
             $key = substr($name, 3, strlen($name));
 
-            if ($this->get($key)) {
-                return $this->get($key);
+            if (array_key_exists($key, $this->datas)) {
+            	return $this->datas[$key];
+            } elseif (array_key_exists(lcfirst($key), $this->datas)) {
+            	return $this->datas[lcfirst($key)];
             }
-            return $this->get(lcfirst($key));
         }
 
-        return null;
+        throw new Undefined();
     }
 }

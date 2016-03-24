@@ -64,6 +64,11 @@ class Request
      */
     private $_userAgent;
 
+    /**
+     * @var string
+     */
+    private $_interface;
+
     const METHOD_GET = 'GET';
     const METHOD_POST = 'POST';
     const METHOD_PUT = 'PUT';
@@ -347,6 +352,30 @@ class Request
     }
 
     /**
+     * Get the network interface to use.
+     *
+     * @return string
+     */
+    public function getInterface()
+    {
+    	return $this->_interface;   
+    }
+
+    /**
+     * Set the network interface to use.
+     *
+     * @param string $interfaces the interface.
+     *
+     * @return Request
+     */
+    public function setInterface($interface)
+    {
+    	$this->_interface = $interface;
+
+   		return $this;
+    }
+
+    /**
      * build the corresponding Curl Request
      *
      * @return Resource
@@ -385,6 +414,10 @@ class Request
         
         if ($this->getReferer()) {
             curl_setopt($this->_curlRequest, CURLOPT_REFERER, $this->getReferer());
+        }
+
+        if ($this->getInterface()) {
+        	curl_setopt($this->_curlRequest, CURLOPT_INTERFACE, $this->getInterface());
         }
 
         if ($this->getBody()) {

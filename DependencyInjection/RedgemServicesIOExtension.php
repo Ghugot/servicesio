@@ -40,8 +40,13 @@ class RedgemServicesIOExtension extends Extension
     $config = $this->processConfiguration($configuration, $configs);
 
     $container->setParameter(
-        'servicesio_models',
-        isset($config['models']) ? $config['models'] : array()
+        'servicesio_model',
+        isset($config['model']) ? $config['model'] : array()
+    );
+
+    $container->setParameter(
+    	'servicesio_http',
+    	isset($config['http']) ? $config['http'] : array()
     );
 
     $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

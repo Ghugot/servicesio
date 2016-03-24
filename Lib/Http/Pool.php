@@ -13,6 +13,8 @@
 
 namespace Redgem\ServicesIOBundle\Lib\Http;
 
+use Symfony\Bridge\Monolog\Logger;
+
 /**
  * the Service class furnish helpers to build
  * the differents objects needed by ServicesIO Http requesting
@@ -25,6 +27,12 @@ namespace Redgem\ServicesIOBundle\Lib\Http;
  */
 class Pool
 {
+	/**
+	 *
+	 * @var Logger
+	 */
+	private $_monolog;
+
     /**
      *
      * @var array<Request>
@@ -32,11 +40,17 @@ class Pool
     private $_requests;
 
     /**
+     *
+     * @var float
+     */
+    private $_time;
+
+    /**
      * the constructor
      */
-    public function __construct()
+    public function __construct(Logger $monolog = null)
     {
-
+		$this->_monolog = $monolog;
     }
 
     /**
@@ -54,13 +68,23 @@ class Pool
     }
 
     /**
-     * count how many requests do we have
+     * get the requests
      * 
-     * @return int
+     * @return array<Request>
      */
-    public function nbRequests()
+    public function getRequests()
     {
-        return count($this->_requests);
+        return $this->_requests;
+    }
+
+    /**
+     * get querying time
+     *
+     * @return float
+     */
+    public function getTime()
+    {
+    	return $this->_time;
     }
 
     /**
@@ -70,6 +94,8 @@ class Pool
      */
     public function send()
     {
+    	$start = microtime(true);
+
         $mh = curl_multi_init();
 
         foreach($this->_requests as $request) {
@@ -98,7 +124,7 @@ class Pool
                     $headers[$name] = $value;
                 }
             }
-            
+
             $response = new Response(
                 substr($rawResponse, $headerSize),
                 curl_getinfo(
@@ -107,8 +133,9 @@ class Pool
                 ),
                 $headers
             );
-            
+
             $request->setResponse($response);
+            $this->_log($request);
         }
 
         foreach($this->_requests as $request) {
@@ -118,6 +145,43 @@ class Pool
 
         curl_multi_close($mh);
 
+        $this->_time = round((microtime(true) - $start) * 1000);
+
         return $this;
+    }
+
+    /**
+     * push in Monolog the request
+     * 
+     * @param Request $request
+     */
+    private function _log(Request $request)
+    {
+    	$params = array(
+    		'url' => $request->getUrl(true),
+    	);
+
+    	if ($request->getReferer()) {
+    		$params['referer'] = $request->getReferer();
+    	}
+
+    	if ($request->getUserAgent()) {
+    		$params['user-agent'] = $request->getUserAgent();
+    	}
+
+    	if ($request->getCookiesJar()) {
+    		$params['cookies-jar'] = $request->getCookiesJar();
+    	}
+
+    	if ($request->getInterface()) {
+    		$params['interface'] = $request->getInterface();
+    	}
+
+    	$params['status'] = $request->getResponse()->getStatusCode();
+
+    	$this->_monolog->info(
+    		'servicesio_http request',
+    		$params
+    	);
     }
 }

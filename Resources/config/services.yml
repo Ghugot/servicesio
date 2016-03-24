@@ -19,3 +19,10 @@ services:
 
     servicesio_http:
         class: Redgem\ServicesIOBundle\Lib\Http\Service
+        arguments:
+            monolog: "@monolog.logger"
+            config: "%servicesio_http%"
+            logger: "@servicesio_http.logger"
+
+    servicesio_http.logger:
+        class: Redgem\ServicesIOBundle\Lib\Http\Profiler\Logger

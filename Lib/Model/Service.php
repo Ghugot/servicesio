@@ -47,7 +47,7 @@ class Service
     public function __construct(Container $container)
     {
         $this->config = $container
-            ->getParameter('servicesio_models');
+            ->getParameter('servicesio_model');
 
         self::$container = $container;
     }

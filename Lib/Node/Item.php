@@ -104,9 +104,14 @@ class Item extends Collection
 
             if (array_key_exists($key, $this->datas)) {
             	return $this->datas[$key];
-            } elseif (array_key_exists(lcfirst($key), $this->datas)) {
+            } 
+            if (array_key_exists(lcfirst($key), $this->datas)) {
             	return $this->datas[lcfirst($key)];
             }
+        }
+
+        if (array_key_exists($name, $this->datas)) {
+        	return $this->datas[$name];
         }
 
         throw new Undefined();

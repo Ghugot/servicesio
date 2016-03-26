@@ -51,6 +51,7 @@ class Pool
     public function __construct(Logger $monolog = null)
     {
 		$this->_monolog = $monolog;
+		$this->_requests = array();
     }
 
     /**
@@ -75,6 +76,16 @@ class Pool
     public function getRequests()
     {
         return $this->_requests;
+    }
+
+    /**
+     * get the number of embedded requests
+     *
+     * @return int
+     */
+    public function nbRequests()
+    {
+    	return count($this->_requests);
     }
 
     /**

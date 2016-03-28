@@ -43,7 +43,7 @@ class Item extends Collection
      */
     public function get($key, $default = null)
     {
-        if (!isset($this->datas[$key])) {
+        if (!array_key_exists($key, $this->datas)) {
             return $default;
         }
 
@@ -97,6 +97,18 @@ class Item extends Collection
     {
     	if ('all' == $name) {
     		return null;
+    	}
+
+    	if ('has' == substr($name, 0, 3)) {
+    		$key = substr($name, 3, strlen($name));
+
+    		if (array_key_exists($key, $this->datas)) {
+    			return true;
+    		}
+    		if (array_key_exists(lcfirst($key), $this->datas)) {
+    			return true;
+    		}
+    		return false;
     	}
 
         if ('get' == substr($name, 0, 3)) {

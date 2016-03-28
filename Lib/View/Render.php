@@ -116,7 +116,7 @@ class Render
     private function _getClassNameFromConfig($viewpath)
     {
         $list = $this->_getClassListFromPath($viewpath);
-        
+
         foreach($list as $item) {
             $className = $this->_extractClassNameFromViewpath($item);
 
@@ -181,7 +181,7 @@ class Render
                 $sourceBundle = $child;
             }
         } while ($child);
-        
+
         return array_reverse($a);
     }
 
@@ -205,8 +205,38 @@ class Render
      * @return string
      */
     private function _extractClassNameFromViewpath($viewpath)
-    {
-        $viewpath = preg_replace('|^([^:]+):(.+)$|Ui', '$1:View:$2', $viewpath);
+    {    	
+        $viewpath = preg_replace(
+        	'|^([^:]+):(.+)$|Ui',
+        	$this->_getBundleNamespace(
+        		$this->_extractBundleNameFromViewpath($viewpath)
+        	) . ':View:$2',
+        	$viewpath
+        );
+
         return str_replace(':', '\\', $viewpath);
+    }
+
+    /**
+     * get the classname associated with this bundle
+     * 
+     * @param string $bundleName
+     * 
+     * @throws Exception
+     * 
+     * @return string
+     */
+    private function _getBundleNamespace($bundleName)
+    {
+    	foreach($this->_container->get('kernel')->getBundles() as $bundle) {
+    		$class = get_class($bundle);
+    		if ($bundleName == substr(strrchr($class, '\\'), 1)) {
+				return substr($class, 0, strrpos($class, '\\'));   
+    		}
+    	}
+
+    	throw new Exception(
+    		sprintf('bundle "%s" not found', $bundleName)
+    	);
     }
 }

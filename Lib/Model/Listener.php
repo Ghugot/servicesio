@@ -17,6 +17,7 @@ use Redgem\ServicesIOBundle\Lib\Factory\Input\Factory;
 use Redgem\ServicesIOBundle\Lib\Model\Service as Model;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use \Exception;
 
 /**
  * Called before the controller, the Listener update on the fly the 
@@ -66,20 +67,22 @@ class Listener
      */
     public function onKernelController(FilterControllerEvent $event)
     {
-        $route = $this
-            ->_router
-            ->match(
-                $event->getRequest()->getPathInfo()
-            );
+    	try {
+	        $route = $this
+	            ->_router
+	            ->match(
+	                $event->getRequest()->getPathInfo()
+	            );
 
-        if (!array_key_exists('servicesio_model', $route)) {
-            return;
-        }
-        
-        $event->getRequest()->request
-            = $this->_model->build(
-                $event->getRequest()->getContent(),
-                $route['servicesio_model']
-            );
+	        if (!array_key_exists('servicesio_model', $route)) {
+	            return;
+	        }
+
+	        $event->getRequest()->request
+	            = $this->_model->build(
+	                $event->getRequest()->getContent(),
+	                $route['servicesio_model']
+	            );
+    	} catch (Exception $e) {}
     }
 }

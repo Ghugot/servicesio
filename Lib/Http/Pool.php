@@ -137,16 +137,13 @@ class Pool
             }
 
             $code = curl_getinfo(
-				$request->getCurlRequest(),
-				CURLINFO_HTTP_CODE
-			);
+                $request->getCurlRequest(),
+                CURLINFO_HTTP_CODE
+            );
 
             $response = new Response(
                 ($code == 0) ? '' : substr($rawResponse, $headerSize),
-                curl_getinfo(
-                    $request->getCurlRequest(),
-                    CURLINFO_HTTP_CODE
-                ),
+                $code,
                 $headers
             );
 

@@ -115,32 +115,31 @@ class Request
 
         $a = parse_url($this->_url);
 
+        $url = '';
 
-		$url = '';
-		
-		if (isset($a['scheme'])) {
-			$url = $a['scheme'] . '://';
-		} else {
-			$url = 'http://';
-		}
+        if (isset($a['scheme'])) {
+            $url = $a['scheme'] . '://';
+        } else {
+            $url = 'http://';
+        }
 
-		if (!isset($a['host'])) {
-			throw new Exception('URL must be absolute');
-		}
+        if (!isset($a['host'])) {
+            throw new Exception('URL must be absolute');
+        }
 
-		$url = $url . $a['host'];
+        $url = $url . $a['host'];
 	
-		if (isset($a['port'])) {
-			$url = $url . ':' . $a['port'];
-		}
-	
-		if (isset($a['path'])) {
-			$url = $url . $a['path'];
-		}
+        if (isset($a['port'])) {
+            $url = $url . ':' . $a['port'];
+        }
 
-		if (isset($a['query'])) {
-			$url = $url . '?' . $a['query'];
-		}
+        if (isset($a['path'])) {
+            $url = $url . $a['path'];
+        }
+
+        if (isset($a['query'])) {
+            $url = $url . '?' . $a['query'];
+        }
 
         if (sizeof($this->_parameters) == 0) {
             return $url;

@@ -13,6 +13,8 @@
 
 namespace Redgem\ServicesIOBundle\Lib\Http;
 
+use \Exception;
+
 /**
  * The request representation for a Http query.
  *
@@ -111,8 +113,37 @@ class Request
             return $this->_url;
         }
 
+        $a = parse_url($this->_url);
+
+
+		$url = '';
+		
+		if (isset($a['scheme'])) {
+			$url = $a['scheme'] . '://';
+		} else {
+			$url = 'http://';
+		}
+
+		if (!isset($a['host'])) {
+			throw new Exception('URL must be absolute');
+		}
+
+		$url = $url . $a['host'];
+	
+		if (isset($a['port'])) {
+			$url = $url . ':' . $a['port'];
+		}
+	
+		if (isset($a['path'])) {
+			$url = $url . $a['path'];
+		}
+
+		if (isset($a['query'])) {
+			$url = $url . '?' . $a['query'];
+		}
+
         if (sizeof($this->_parameters) == 0) {
-            return $this->_url;
+            return $url;
         }
 
         $a = [];
@@ -121,7 +152,7 @@ class Request
         }
 
         return sprintf('%s%s%s',
-            $this->_url,
+            $url,
             ((strpos($this->_url, '?') === false) ? '?' : '&'),
             implode('&', $a)
         );

@@ -42,7 +42,7 @@ class Node
      * 
      * @param Container $container The Symfony container
      * 
-     * @return Base
+     * @return Node
      */
     public function setContainer(Container $container)
     {
@@ -69,6 +69,22 @@ class Node
     public function count()
     {
         return count($this->datas);
+    }
+
+    /**
+     * Can execute some code after treatment ended.
+     *
+     * @return Node
+     */
+    public function postTreatment()
+    {
+    	foreach($this->datas as $item) {
+    		if ($item instanceOf self) {
+    			$item->postTreatment();
+    		}
+    	}
+
+    	return $this;
     }
 
     /**

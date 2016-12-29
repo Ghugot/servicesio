@@ -78,11 +78,14 @@ class Listener
 	            return;
 	        }
 
-	        $event->getRequest()->request
+	        $event->getRequest()->model
 	            = $this->_model->build(
 	                $event->getRequest()->getContent(),
 	                $route['servicesio_model']
 	            );
+
+	        $event->getRequest()->request = $event->getRequest()->model;
+
     	} catch (Exception $e) {}
     }
 }

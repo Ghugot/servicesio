@@ -45,11 +45,11 @@ class Service
 
     /**
      * render the view. This method is supposed to be called by the controller
-     * 
+     *
      * @param string $viewpath  the viewpath (a string like MyBundle:MessageView)
      * @param array  $params    the data to send to the view
      *
-     * @return string
+     * @return Response
      */
     public function render($viewpath, array $params = array())
     {
@@ -62,9 +62,39 @@ class Service
         $response
             ->setSource($node)
             ->setContent(
-                json_encode($factory->get())
+                $this->_json($factory)
             );
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
+
+    /*
+     * build the view. Usually used as a transparent dependancy of Render()
+     * but useful if you want to get a json without building a Symfony Response object
+     * @param string $viewpath  the viewpath (a string like MyBundle:MessageView)
+     * @param array  $params    the data to send to the view
+     *
+     * @return string
+     */
+    public function build($viewpath, array $params = array())
+    {
+        $render = new Render($this->_container, $viewpath, $params);
+        $node = $render->get();
+
+        $factory = new Factory($node);
+
+        return $this->_json($factory);
+    }
+
+    /**
+     * get the json representation built by factory
+     *
+     * @param Factory $factory
+     * @return string
+     */
+    private function _json(Factory $factory)
+    {
+        return json_encode($factory->get());
+    }
+
 }

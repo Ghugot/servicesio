@@ -56,13 +56,13 @@ class Service
         $render = new Render($this->_container, $viewpath, $params);
         $node = $render->get();
 
-        $factory = new Factory($node);
-
         $response = new Response();
         $response
             ->setSource($node)
             ->setContent(
-                $this->_json($factory)
+                $this->_json(
+                    new Factory($node)
+                )
             );
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -81,9 +81,9 @@ class Service
         $render = new Render($this->_container, $viewpath, $params);
         $node = $render->get();
 
-        $factory = new Factory($node);
-
-        return $this->_json($factory);
+        return $this->_json(
+            new Factory($node)
+        );
     }
 
     /**

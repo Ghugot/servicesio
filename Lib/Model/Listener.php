@@ -84,8 +84,6 @@ class Listener
 	                $route['servicesio_model']
 	            );
 
-	        $event->getRequest()->request = $event->getRequest()->model;
-
     	} catch (Exception $e) {}
     }
 }

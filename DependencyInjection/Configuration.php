@@ -36,7 +36,7 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('redgem_services_io');
 
-        $$treeBuilder
+        $treeBuilder
             ->getRootNode()
             ->children()
             	->arrayNode('http')

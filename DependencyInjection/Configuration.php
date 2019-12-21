@@ -34,10 +34,10 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('redgem_services_io');
+        $treeBuilder = new TreeBuilder('redgem_services_io');
 
-        $rootNode
+        $$treeBuilder
+            ->getRootNode()
             ->children()
             	->arrayNode('http')
             		->children()

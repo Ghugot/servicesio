@@ -1,28 +1,28 @@
 services:
-    servicesio_view:
-        class: Redgem\ServicesIOBundle\Lib\View\Service
+    Redgem\ServicesIOBundle\Lib\View\Service:
+        public: true
         arguments:
-            container: "@service_container"
+            $container: '@service_container'
 
-    servicesio_model:
-        class: Redgem\ServicesIOBundle\Lib\Model\Service
+    Redgem\ServicesIOBundle\Lib\Model\Service:
+        public: true
         arguments:
-            container: "@service_container"
+            $container: '@service_container'
 
-    servicesio_model_listener:
-        class: Redgem\ServicesIOBundle\Lib\Model\Listener
+    Redgem\ServicesIOBundle\Lib\Model\Listener:
+        public: true
         arguments:
-            model: "@servicesio_model"
-            router: "@router"
+            $model: '@Redgem\ServicesIOBundle\Lib\Model\Service'
+            $router: "@router"
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
-    servicesio_http:
-        class: Redgem\ServicesIOBundle\Lib\Http\Service
+    Redgem\ServicesIOBundle\Lib\Http\Service:
+        public: true
         arguments:
-            monolog: "@monolog.logger"
-            config: "%servicesio_http%"
-            logger: "@servicesio_http.logger"
+            $monolog: "@logger"
+            $config: "%servicesio_http%"
+            $httpLogger: '@Redgem\ServicesIOBundle\Lib\Http\Profiler\Logger'
 
-    servicesio_http.logger:
-        class: Redgem\ServicesIOBundle\Lib\Http\Profiler\Logger
+    Redgem\ServicesIOBundle\Lib\Http\Profiler\Logger:
+        public: true

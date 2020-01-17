@@ -118,10 +118,8 @@ class Render
         $list = $this->_getClassListFromPath($viewpath);
 
         foreach($list as $item) {
-            $className = $this->_extractClassNameFromViewpath($item);
-
-            if (class_exists($className)) {
-                return $className;
+            if (class_exists($item)) {
+                return $item;
             }
         }
 
@@ -145,98 +143,6 @@ class Render
             $viewpath = array($viewpath);
         }
 
-        $a = array();
-        foreach($viewpath as $item) {
-            $sourceBundle = $this->_extractBundleNameFromViewpath($item);
-
-            foreach($this->_getBundleChildsOf($sourceBundle) as $bundleName) {
-                $a[] = preg_replace('|^('.$sourceBundle.'):(.*)$|', $bundleName . ':$2', $item);
-            }
-        }
-
-        return $a;
-    }
-
-    /**
-     * get all the childs of a bundle
-     * 
-     * @param string $sourceBundle
-     * 
-     * @return array<string> 
-     */
-    private function _getBundleChildsOf($sourceBundle)
-    {
-        $a[] = $sourceBundle;
-
-        do {
-            $child = null;
-            foreach($this->_container->get('kernel')->getBundles() as $bundle) {
-                if ($sourceBundle == $bundle->getParent()) {
-                    $child = substr(strrchr(get_class($bundle), '\\'), 1);
-                }
-            }
-
-            if ($child) {
-                $a[] = $child;
-                $sourceBundle = $child;
-            }
-        } while ($child);
-
-        return array_reverse($a);
-    }
-
-    /**
-     * get bundle name from path
-     *
-     * @param string|array<string> $viewpath the viewpath (a string like MyBundle:MessageView)
-     *
-     * @return string
-     */
-    private function _extractBundleNameFromViewpath($viewpath)
-    {
-        return preg_replace('|^([^:]+):(.+)$|Ui', '$1', $viewpath);
-    }
-
-    /**
-     * get view classname from path
-     *
-     * @param string|array<string> $viewpath the viewpath (a string like MyBundle:MessageView)
-     *
-     * @return string
-     */
-    private function _extractClassNameFromViewpath($viewpath)
-    {    	
-        $viewpath = preg_replace(
-        	'|^([^:]+):(.+)$|Ui',
-        	$this->_getBundleNamespace(
-        		$this->_extractBundleNameFromViewpath($viewpath)
-        	) . ':View:$2',
-        	$viewpath
-        );
-
-        return str_replace(':', '\\', $viewpath);
-    }
-
-    /**
-     * get the classname associated with this bundle
-     * 
-     * @param string $bundleName
-     * 
-     * @throws Exception
-     * 
-     * @return string
-     */
-    private function _getBundleNamespace($bundleName)
-    {
-    	foreach($this->_container->get('kernel')->getBundles() as $bundle) {
-    		$class = get_class($bundle);
-    		if ($bundleName == substr(strrchr($class, '\\'), 1)) {
-				return substr($class, 0, strrpos($class, '\\'));   
-    		}
-    	}
-
-    	throw new Exception(
-    		sprintf('bundle "%s" not found', $bundleName)
-    	);
+        return $viewpath;
     }
 }

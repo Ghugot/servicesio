@@ -58,6 +58,10 @@ class Parser
      */
     public function getReplacedContent()
     {
+        if (!$this->_node) {
+            return $this->_node;
+        }
+
         if ('Redgem\\ServicesIOBundle\\Lib\\Node\\Item' != get_class($this->_node)) {
             return $this->_node;
         }

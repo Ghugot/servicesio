@@ -45,7 +45,7 @@ class Factory extends Base
             $factory = new Item($this->node);
             return $factory->get();
         } else {
-            throw new Exception('building output datas from a custom Item class is not yet supported');
+            throw new Exception('building output data from a custom Item class is not yet supported');
         }
     }
 }

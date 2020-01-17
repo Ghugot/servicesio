@@ -13,7 +13,7 @@
 
 namespace Redgem\ServicesIOBundle\Lib\Http;
 
-use Symfony\Bridge\Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 /**
  * the Service class furnish helpers to build
@@ -29,7 +29,7 @@ class Pool
 {
 	/**
 	 *
-	 * @var Logger
+	 * @var LoggerInterface
 	 */
 	private $_monolog;
 
@@ -48,7 +48,7 @@ class Pool
     /**
      * the constructor
      */
-    public function __construct(Logger $monolog = null)
+    public function __construct(LoggerInterface $monolog = null)
     {
 		$this->_monolog = $monolog;
 		$this->_requests = array();

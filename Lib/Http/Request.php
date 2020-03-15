@@ -432,8 +432,8 @@ class Request
         curl_setopt($this->_curlRequest, CURLOPT_CUSTOMREQUEST, $this->getMethod());
         curl_setopt($this->_curlRequest, CURLOPT_HEADER, 1);
         curl_setopt($this->_curlRequest, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($this->_curlRequest, CURLOPT_FRESH_CONNECT, 1);
-        curl_setopt($this->_curlRequest, CURLOPT_FORBID_REUSE, 1);
+        curl_setopt($this->_curlRequest, CURLOPT_FRESH_CONNECT, false);
+        curl_setopt($this->_curlRequest, CURLOPT_FORBID_REUSE, false);
         curl_setopt($this->_curlRequest, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($this->_curlRequest, CURLOPT_MAXREDIRS, 3);
 

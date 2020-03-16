@@ -17,7 +17,7 @@ First of all, add and enable _ServicesIOBundle_ in your project.
 
 Add it in composer :
 
-`composer require redgem/servicesio-bundle:2.0.*`
+`composer require redgem/servicesio-bundle:1.0.*`
 
 All set.
 

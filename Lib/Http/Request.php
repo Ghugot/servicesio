@@ -304,7 +304,7 @@ class Request
             );
         }
 
-        $this->method = $method;
+        $this->_method = $method;
 
         return $this;
     }

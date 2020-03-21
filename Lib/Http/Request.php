@@ -477,14 +477,8 @@ class Request
      *
      * @return Request
      */
-    public function setResponse(Response $response)
+    public function setResponse(?Response $response)
     {
-        if (!$this->_curlRequest) {
-            throw new Exception(
-                'This request has not been sent yet'
-            );
-        }
-
         $this->_response = $response;
 
         return $this;

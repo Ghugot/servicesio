@@ -31,13 +31,13 @@ class Pool
 	 *
 	 * @var LoggerInterface
 	 */
-	private $_monolog;
+	protected $_monolog;
 
     /**
      *
      * @var array<Request>
      */
-    private $_requests;
+    protected $_requests;
 
     /**
      *
@@ -110,50 +110,52 @@ class Pool
         $mh = curl_multi_init();
 
         foreach($this->_requests as $request) {
-            curl_multi_add_handle($mh, $request->getCurlRequest());
+            if (!$request->getResponse()) {
+                curl_multi_add_handle($mh, $request->getCurlRequest());
+            }
         }
 
         $running = null;
         do {
-            curl_multi_exec($mh,$running);
+            curl_multi_exec($mh, $running);
         } while ($running > 0);
 
         foreach($this->_requests as $request) {
-            $rawResponse = curl_multi_getcontent($request->getCurlRequest());
+            if (!$request->getResponse()) {
+                $rawResponse = curl_multi_getcontent($request->getCurlRequest());
 
-            $headerSize = curl_getinfo(
-                $request->getCurlRequest(),
-                CURLINFO_HEADER_SIZE
-            );
+                $headerSize = curl_getinfo(
+                    $request->getCurlRequest(),
+                    CURLINFO_HEADER_SIZE
+                );
 
-            $headers = array();
-            foreach(explode("\r\n", substr($rawResponse, 0, $headerSize)) as $header) {
-                $pos = strpos($header, ':');
-                if(false !== $pos) {
-                    $name  = trim(substr($header, 0, $pos));
-                    $value = trim(substr($header, $pos + 1));
-                    $headers[$name] = $value;
+                $headers = array();
+                foreach(explode("\r\n", substr($rawResponse, 0, $headerSize)) as $header) {
+                    $pos = strpos($header, ':');
+                    if(false !== $pos) {
+                        $name  = trim(substr($header, 0, $pos));
+                        $value = trim(substr($header, $pos + 1));
+                        $headers[$name] = $value;
+                    }
                 }
+
+                $code = curl_getinfo(
+                    $request->getCurlRequest(),
+                    CURLINFO_HTTP_CODE
+                );
+
+                $response = new Response(
+                    ($code == 0) ? '' : substr($rawResponse, $headerSize),
+                    $code,
+                    $headers
+                );
+
+                $request->setResponse($response);
+                $this->_log($request);
+
+                curl_multi_remove_handle($mh, $request->getCurlRequest());
+                curl_close($request->getCurlRequest());
             }
-
-            $code = curl_getinfo(
-                $request->getCurlRequest(),
-                CURLINFO_HTTP_CODE
-            );
-
-            $response = new Response(
-                ($code == 0) ? '' : substr($rawResponse, $headerSize),
-                $code,
-                $headers
-            );
-
-            $request->setResponse($response);
-            $this->_log($request);
-        }
-
-        foreach($this->_requests as $request) {
-            curl_multi_remove_handle($mh, $request->getCurlRequest());
-            curl_close($request->getCurlRequest());
         }
 
         curl_multi_close($mh);
@@ -168,8 +170,12 @@ class Pool
      * 
      * @param Request $request
      */
-    private function _log(Request $request)
+    protected function _log(Request $request)
     {
+        if (!$this->_monolog) {
+            return;
+        }
+
     	$params = array(
     		'url' => $request->getUrl(true),
     	);

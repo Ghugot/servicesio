@@ -38,6 +38,11 @@ class Service
 	 */
 	private $_config;
 
+    /**
+     * @var string
+     */
+    private $_directory;
+
 	/**
 	 * @var array
 	 */
@@ -46,10 +51,11 @@ class Service
     /**
      * the constructor
      */
-    public function __construct(LoggerInterface $monolog, $config, $httpLogger = null)
+    public function __construct(LoggerInterface $monolog, $config, string $directory, $httpLogger = null)
     {
 		$this->_monolog = $monolog;
 		$this->_config = $config;
+        $this->_directory = $directory;
 		$this->_httpLogger = $httpLogger;
     }
 
@@ -87,9 +93,18 @@ class Service
      */
     public function createPool()
     {
-        $pool = new Pool(
-        	$this->_monolog
-        );
+        $pool = null;
+        if (isset($this->_config['mock']['activated']) && $this->_config['mock']['activated']) {
+            $pool = new MockedPool(
+                $this->_monolog,
+                $this->_config['mock']['responses'],
+                $this->_directory
+            );
+        } else {
+            $pool = new Pool(
+                $this->_monolog
+            );
+        }
 
         if ($this->_httpLogger) {
         	$this->_httpLogger

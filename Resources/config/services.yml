@@ -22,6 +22,7 @@ services:
         arguments:
             $monolog: "@logger"
             $config: "%servicesio_http%"
+            $directory: '%kernel.project_dir%'
             $httpLogger: '@Redgem\ServicesIOBundle\Lib\Http\Profiler\Logger'
 
     Redgem\ServicesIOBundle\Lib\Http\Profiler\Logger:

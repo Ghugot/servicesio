@@ -14,6 +14,7 @@
 namespace Redgem\ServicesIOBundle\Lib\Http;
 
 use Psr\Log\LoggerInterface;
+use \Exception;
 
 /**
  * To handle and resolve the mocked requests.
@@ -96,7 +97,9 @@ class MockedPool extends Pool
     private function _mockMatch(string $file) : ?Response
     {
         if (!file_exists($this->_directory . $file)) {
-            return null;
+            throw new Exception(
+                sprintf('unable to find "%s"', $this->_directory . $file)
+            );
         }
 
         return new Response(
